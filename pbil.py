@@ -1,7 +1,7 @@
 import random
 
-population_size = 5
-max_weight = 25
+population_size = 2 #TODO 5
+max_weight = 26
 # weights = [12, 7, 11, 8, 9]
 # prices = [24, 13, 23, 15, 16]
 items = [(12, 24), (7, 13), (11, 23), (8, 15), (9, 16)]
@@ -32,12 +32,15 @@ def create_population(v):
     j = random.randint(0, n)
     j += 1
     for i in range(1, population_size):
-        for j in range(1, n):
+        j = 0
+        while j < n:
             r = random.uniform(0, 1)
             if v[j] > r:
                 p[i][j] = 1
             if weight(p[i]) > max_weight:
                 j = 0
+            else:
+                j += 1
     # print("population {}", p)
     return p
 
@@ -87,7 +90,7 @@ def main():
     knapsack = best_knapsack
     # p = # create empty 2d array
     v = [.5] * n  # probability vector
-    max_iter = 20  # total amount of iterations # TODO increase to 100
+    max_iter = 5  # total amount of iterations # TODO increase to 100
 
     for i in range(1, max_iter):
         p = create_population(v)
