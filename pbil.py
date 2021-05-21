@@ -98,16 +98,14 @@ def pbil():
         print(f"Current generation best knapsack: {knapsack}, Value: {value(knapsack)}, Weight {weight(knapsack)}")
         early_stop = 0
         if curr_generation > early_stopping_patience:
-           # early_stopping_start_index = curr_generation - (early_stopping_patience + 1)
-         #   print("earlty",  early_stopping_start_index)
-            temp_value = generation_value[-1 - early_stopping_patience]
-            print(f"Checking early stopping: {temp_value}", end=" ")
+            first_value = generation_value[-1 - early_stopping_patience]
+            print(f"Checking early stopping: {first_value}", end=" ")
             j = -1
             while j > -early_stopping_patience - 1:
                 print(f"{generation_value[j]}", end=" ")
                 if j == -early_stopping_patience:
                     print("")
-                if generation_value[j] <= temp_value:
+                if generation_value[j] <= first_value:
                     early_stop += 1
                 j -= 1
         if early_stop >= early_stopping_patience:
@@ -123,5 +121,4 @@ if __name__ == '__main__':
 # TODO parametry do pliku i problem
 # TODO wykresy ----- jak zbierac dane
 # TODO sprawdzanie czasu wykonywania algorytmu
-# TODO early stopping factor
 # TODO przeniesienie do osobnego pliku
