@@ -5,15 +5,15 @@ items = [(12, 24), (7, 13), (11, 23), (8, 15), (9, 16)]
 max_weight = 26
 # PBIL parameters
 population_size = 20
-generations = 20  # total amount of iterations
+generations = 100  # total amount of iterations
 mutation_probability = 0.2  # from 0 to 1
 mutation_value = 0.1  # from 0 to 1
 learning_rate1 = 0.1  # from 0 to 1
 learning_rate2 = 0.2  # from 0 to 1 and greater than learning_rate1
+early_stopping_patience = 3  # int from 1
 
 n = len(items)  # number of all items
 best_knapsack = [0] * n  # create array filled with zeros of length n, best knapsack so far
-curr_generation = 1
 
 
 def value(item_set):
@@ -33,18 +33,17 @@ def weight(item_set):
 
 
 def create_population(probability_vec):
-    print("create_population", end=" ")
+    # print("create_population", end=" ")
     p = [[0] * n for _ in range(population_size)]  # empty 2d array
     for i in range(1, population_size):
         for j in range(0, n):
-            r = random.uniform(0, 1)
-            if probability_vec[j] > r:
+            if random.uniform(0, 1) < probability_vec[j]:
                 p[i][j] = 1
     return p
 
 
 def get_best_knapsack(population):
-    print("get_best_knapsack", end=" ")
+    # print("get_best_knapsack", end=" ")
     max_value = 0
     max_value_index = -1
     for i in range(1, population_size):
@@ -58,21 +57,25 @@ def get_best_knapsack(population):
     return population[max_value_index]
 
 
-def update_prob_vector(knapsack, probability_vec):
-    print("update_prob_vector", end=" ")
+def evaluate_knapsack(knapsack):
     global best_knapsack
     if value(best_knapsack) >= value(knapsack):
         alpha = learning_rate1
     else:
         alpha = learning_rate2
         best_knapsack = knapsack
+    return alpha
+
+
+def update_prob_vector(alpha, probability_vec):
+    # print("update_prob_vector", end=" ")
     for i in range(1, n):
         probability_vec[i] = probability_vec[i] * (1 - alpha) + alpha * best_knapsack[i]
     return probability_vec
 
 
 def mutate(probability_vec):
-    print("mutate")
+    # print("mutate")
     for i in range(1, n):
         if random.uniform(0, 1) < mutation_probability:
             probability_vec[i] = probability_vec[i] * (1 - mutation_value) + random.uniform(0, 1) * mutation_value
@@ -80,18 +83,45 @@ def mutate(probability_vec):
 
 
 def pbil():
-    knapsack = best_knapsack
     probability_vec = [.5] * n  # initial probability vector
-    global curr_generation
+    curr_generation = 1
+    generation_value = []
     for i in range(1, generations):
         print(f"Processing {curr_generation:2} generation:", end=" ")
         population = create_population(probability_vec)
         knapsack = get_best_knapsack(population)
-        probability_vec = update_prob_vector(knapsack, probability_vec)
+        alpha = evaluate_knapsack(knapsack)
+        probability_vec = update_prob_vector(alpha, probability_vec)
         probability_vec = mutate(probability_vec)
+
+        generation_value.append(value(knapsack))
+        print(f"Current generation best knapsack: {knapsack}, Value: {value(knapsack)}, Weight {weight(knapsack)}")
+        early_stop = 0
+        if curr_generation > early_stopping_patience:
+           # early_stopping_start_index = curr_generation - (early_stopping_patience + 1)
+         #   print("earlty",  early_stopping_start_index)
+            temp_value = generation_value[-1 - early_stopping_patience]
+            print(f"Checking early stopping: {temp_value}", end=" ")
+            j = -1
+            while j > -early_stopping_patience - 1:
+                print(f"{generation_value[j]}", end=" ")
+                if j == -early_stopping_patience:
+                    print("")
+                if generation_value[j] <= temp_value:
+                    early_stop += 1
+                j -= 1
+        if early_stop >= early_stopping_patience:
+            print("Early stopping")
+            break
         curr_generation += 1
-    print(f"Best knapsack: {knapsack}, Value: {value(knapsack)}, Weight: {weight(knapsack)}")
+    print(f"\nBest knapsack: {best_knapsack}, Value: {value(best_knapsack)}, Weight: {weight(best_knapsack)}")
 
 
 if __name__ == '__main__':
     pbil()
+
+# TODO parametry do pliku i problem
+# TODO wykresy ----- jak zbierac dane
+# TODO sprawdzanie czasu wykonywania algorytmu
+# TODO early stopping factor
+# TODO przeniesienie do osobnego pliku
