@@ -45,5 +45,10 @@ if __name__ == '__main__':
     else:
         main(sys.argv[1])
 
-# TODO plots + how to collect data
-# TODO to co mam to correlated problem, dorobic totalnie raqndom jako uncorrelated
+# TODO plots + sufficient data?
+# http://www.dcs.gla.ac.uk/~pat/cpM/jchoco/knapsack/papers/hardInstances.pdf
+# http://hjemmesider.diku.dk/~pisinger/codes.html
+# http://artemisa.unicauca.edu.co/~johnyortega/instances_01_KP/
+# http://galera.ii.pw.edu.pl/~skozdrow/AMHE/amhe_SK_lato_2021.pdf
+# https://www.researchgate.net/publication/343738629_Adaptive_Algorithms_for_solving_the_Knapsack_Problem#pfb
+# https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html

@@ -3,7 +3,7 @@
   "verbose_details": true,
   "problem_path": "problems/knapPI_3_50_100000_1",
   "population_size": 200,
-  "generations": 1000,
+  "generations": 10000,
   "mutation_probability": 0.2,
   "mutation_value": 0.2,
   "learning_rate1": 0.1,

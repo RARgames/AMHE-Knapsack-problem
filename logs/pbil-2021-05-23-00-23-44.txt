@@ -1,7 +1,7 @@
 {
   "algorithm": "p",
   "verbose_details": true,
-  "problem_path": "problems/knapPI_3_50_100000_1",
+  "problem_path": "problems/f1_l-d_kp_10_269",
   "population_size": 200,
   "generations": 1000,
   "mutation_probability": 0.2,

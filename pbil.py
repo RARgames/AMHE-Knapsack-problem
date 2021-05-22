@@ -97,8 +97,8 @@ class Pbil:
                 file.write(f"{i}, {generation_values[i]}, {best_values[i]}, {best_weights[i]}\n")
         with open("logs/final.csv", 'a') as file:
             if os.stat("logs/final.csv").st_size == 0:
-                file.write(f"algorithm_files, n, best_knapsack_value, optimum, best_knapsack_weight, max_weight, solving_time, best_knapsack\n")
-            file.write(f"pbil-{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}, {n}, {value(best_knapsack)}, {optimum}, {weight(best_knapsack)}, {max_weight}, {solving_time}, {best_knapsack}\n")
+                file.write(f"algorithm_files; n; best_knapsack_value; optimum; best_knapsack_weight; max_weight; solving_time; best_knapsack\n")
+            file.write(f"pbil-{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}; {n}; {value(best_knapsack)}; {optimum}; {weight(best_knapsack)}; {max_weight}; {solving_time}; {best_knapsack}\n")
 
     def create_population(self, probability_vec):
         # print("create_population", end=" ")
