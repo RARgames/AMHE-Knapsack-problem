@@ -32,10 +32,11 @@ class Pbil:
         self.learning_rate2 = learning_rate2
         self.early_stopping_patience = early_stopping_patience
 
-    def run(self, _n, _max_weight, _items):
+    def run(self, _n, _max_weight, _optimum, _items, _verbose_details):
         global n, max_weight, items, best_knapsack
         n = _n
         max_weight = _max_weight
+        optimum = _optimum
         items = _items
         best_knapsack = [0] * n  # create array filled with zeros of length n, best knapsack so far
 
@@ -43,7 +44,10 @@ class Pbil:
         curr_generation = 1
         generation_value = []
         for i in range(1, self.generations):
-            print(f"Processing {curr_generation:2} generation:", end=" ")
+            if _verbose_details:
+                print(f"Processing {curr_generation:2} generation:", end=" ")
+            else:
+                print(".", end="")
             population = self.create_population(probability_vec)
             knapsack = self.get_best_knapsack(population)
             alpha = self.evaluate_knapsack(knapsack)
@@ -51,7 +55,8 @@ class Pbil:
             probability_vec = self.mutate(probability_vec)
 
             generation_value.append(value(knapsack))
-            print(f"Current generation best knapsack: {knapsack}, Value: {value(knapsack)}, Weight {weight(knapsack)}")
+            if _verbose_details:
+                print(f"Current generation best knapsack value: {value(knapsack)}, weight {weight(knapsack)} for: {knapsack}")
             if self.early_stopping_patience != -1:
                 early_stop = 0
                 if curr_generation > self.early_stopping_patience:
@@ -69,7 +74,8 @@ class Pbil:
                     print("Early stopping")
                     break
             curr_generation += 1
-        print(f"\nBest knapsack: {best_knapsack}, Value: {value(best_knapsack)}, Weight: {weight(best_knapsack)}")
+        print(f"\nBest knapsack value: {value(best_knapsack)}, weight: {weight(best_knapsack)} for: {best_knapsack}")
+        print(f"Problem optimum: {optimum}, max_weight: {max_weight}")
 
     def create_population(self, probability_vec):
         # print("create_population", end=" ")
@@ -105,7 +111,7 @@ class Pbil:
 
     def update_prob_vector(self, alpha, probability_vec):
         # print("update_prob_vector", end=" ")
-        for i in range(1, n):
+        for i in range(0, n):
             probability_vec[i] = probability_vec[i] * (1 - alpha) + alpha * best_knapsack[i]
         return probability_vec
 
