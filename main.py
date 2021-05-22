@@ -1,6 +1,5 @@
 import json
 import pbil
-import time
 import sys
 
 
@@ -31,16 +30,13 @@ def main(parameters_path):
     learning_rate2 = parameters.get("learning_rate2")
     early_stopping_patience = parameters.get("early_stopping_patience")
 
-    if algorithm == "p":
-        solver = pbil.Pbil(population_size, generations, mutation_probability, mutation_value, learning_rate1, learning_rate2, early_stopping_patience)
-    # else:
-    #     solver = ga.Genetic()
     n, max_weight, optimum, items = read_problem_from_file(problem_path)
 
-    start_time = time.time()
-    solver.run(n, max_weight, optimum, items, verbose_details)
-    solving_time = time.time() - start_time
-    print(f"The Program took: {solving_time} seconds")
+    if algorithm == "p":
+        solver = pbil.Pbil(population_size, generations, mutation_probability, mutation_value, learning_rate1, learning_rate2, early_stopping_patience)
+        solver.run(n, max_weight, optimum, items, verbose_details)
+    # else:
+    #     solver = ga.Genetic()
 
 
 if __name__ == '__main__':
@@ -50,3 +46,4 @@ if __name__ == '__main__':
         main(sys.argv[1])
 
 # TODO plots + how to collect data
+# TODO to co mam to correlated problem, dorobic totalnie raqndom jako uncorrelated
