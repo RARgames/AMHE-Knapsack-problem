@@ -1,5 +1,6 @@
 import json
 import pbil
+import time
 
 
 def read_problem_from_file(problem_path):
@@ -29,11 +30,14 @@ def main():
 
     solver = pbil.Pbil(population_size, generations, mutation_probability, mutation_value, learning_rate1, learning_rate2, early_stopping_patience)
     n, max_weight, items = read_problem_from_file(problem_path)
+
+    start_time = time.time()
     solver.run(n, max_weight, items)
+    solving_time = time.time() - start_time
+    print(f"The Program took: {solving_time} seconds")
 
 
 if __name__ == '__main__':
     main()
 
-# TODO wykresy ----- jak zbierac dane
-# TODO sprawdzanie czasu wykonywania algorytmu
+# TODO plots + how to collect data
