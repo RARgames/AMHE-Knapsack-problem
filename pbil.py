@@ -13,7 +13,7 @@ best_knapsack = []
 
 def value(item_set):
     curr_value = 0
-    for i in range(1, n):
+    for i in range(0, n):
         if item_set[i] == 1:
             curr_value += items[i][0]
     return curr_value
@@ -21,7 +21,7 @@ def value(item_set):
 
 def weight(item_set):
     curr_weight = 0
-    for i in range(1, n):
+    for i in range(0, n):
         if item_set[i] == 1:
             curr_weight += items[i][1]
     return curr_weight
@@ -51,6 +51,7 @@ class Pbil:
         generation_values = []
         best_values = []
         best_weights = []
+
         for i in range(0, self.generations):
             if _verbose_details:
                 print(f"Processing {i:3} generation:", end=" ")
