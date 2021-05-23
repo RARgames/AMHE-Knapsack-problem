@@ -17,8 +17,13 @@ def read_problem_from_file(problem_path):
 
 
 def main(parameters_path):
-    with open(parameters_path, 'r') as file:
-        parameters = json.load(file)
+    try:
+        with open(parameters_path, 'r') as file:
+            parameters = json.load(file)
+    except FileNotFoundError:
+        print("Error: Parameters file not found!")
+        exit()
+
     algorithm = parameters.get("algorithm")
     verbose_details = parameters.get("verbose_details")
     problem_path = parameters.get("problem_path")

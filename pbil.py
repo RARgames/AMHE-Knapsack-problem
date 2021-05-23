@@ -91,6 +91,8 @@ class Pbil:
         metrics_path = f"logs/pbil-{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
         print(f"Generated files: {metrics_path}.txt, {metrics_path}.csv")
         print(f"Final results added to: logs/final.csv")
+        if not os.path.exists("/logs"):
+            os.makedirs("/logs")
         copyfile(sys.argv[1], metrics_path + ".txt")
         with open(metrics_path + ".csv", 'a') as file:
             file.write(f"id, avg_value, best_value, best_weight\n")
