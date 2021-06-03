@@ -1,4 +1,5 @@
 import json
+import os
 import pbil
 import sys
 
@@ -34,14 +35,16 @@ def main(parameters_path):
     learning_rate1 = parameters.get("learning_rate1")
     learning_rate2 = parameters.get("learning_rate2")
     early_stopping_patience = parameters.get("early_stopping_patience")
-
-    n, max_weight, optimum, items = read_problem_from_file(problem_path)
+    repeat_times = parameters.get("repeat_times")
 
     if algorithm == "p":
+        n, max_weight, optimum, items = read_problem_from_file(problem_path)
+
         solver = pbil.Pbil(population_size, generations, mutation_probability, mutation_value, learning_rate1, learning_rate2, early_stopping_patience)
-        solver.run(n, max_weight, optimum, items, verbose_details)
-    # else:
-    #     solver = ga.Genetic()
+        for i in range(0, repeat_times):
+            solver.run(n, max_weight, optimum, items, verbose_details)
+    else:
+        os.system(f"genetic.py {problem_path} 100 ts 1c 0.7 {mutation_probability} {generations}")
 
 
 if __name__ == '__main__':
@@ -49,11 +52,3 @@ if __name__ == '__main__':
         print('No parameters file specified!')
     else:
         main(sys.argv[1])
-
-# TODO plots + sufficient data?
-# http://www.dcs.gla.ac.uk/~pat/cpM/jchoco/knapsack/papers/hardInstances.pdf
-# http://hjemmesider.diku.dk/~pisinger/codes.html
-# http://artemisa.unicauca.edu.co/~johnyortega/instances_01_KP/
-# http://galera.ii.pw.edu.pl/~skozdrow/AMHE/amhe_SK_lato_2021.pdf
-# https://www.researchgate.net/publication/343738629_Adaptive_Algorithms_for_solving_the_Knapsack_Problem#pfb
-# https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html

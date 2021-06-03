@@ -51,12 +51,14 @@ class Pbil:
         generation_values = []
         best_values = []
         best_weights = []
+        early_stopped = self.generations
 
         for i in range(0, self.generations):
             if _verbose_details:
                 print(f"Processing {i:3} generation:", end=" ")
             else:
                 print(".", end="")
+
             population = self.create_population(probability_vec)
             knapsack, avg_pop_value = self.get_best_knapsack(population)
             alpha = self.evaluate_knapsack(knapsack)
@@ -67,23 +69,25 @@ class Pbil:
             best_values.append(value(knapsack))
             best_weights.append(weight(knapsack))
             if _verbose_details:
-                print(f"Current generation avg_value: {avg_pop_value}, best knapsack value: {value(knapsack)}, weight {weight(knapsack)} for: {knapsack}")
+                print(f"Current generation avg_value: {avg_pop_value:10.2f}, best knapsack value: {value(knapsack):10}, weight {weight(knapsack):10} for: {knapsack}")
             if self.early_stopping_patience != -1:
                 early_stop = 0
                 if i > self.early_stopping_patience:
                     first_value = generation_values[-1 - self.early_stopping_patience]
-                    print(f"Checking early stopping: {first_value}", end=" ")
+                    # print(f"Checking early stopping: {first_value}", end=" ")
                     j = -1
                     while j > -self.early_stopping_patience - 1:
-                        print(f"{generation_values[j]}", end=" ")
-                        if j == -self.early_stopping_patience:
-                            print("")
+                        # print(f"{generation_values[j]}", end=" ")
+                        # if j == -self.early_stopping_patience:
+                        #    print("")
                         if generation_values[j] <= first_value:
                             early_stop += 1
                         j -= 1
                 if early_stop >= self.early_stopping_patience:
                     print("Early stopping")
+                    early_stopped = i
                     break
+
         print(f"\nBest knapsack value: {value(best_knapsack)}, weight: {weight(best_knapsack)} for: {best_knapsack}")
         print(f"Problem optimum: {optimum}, max_weight: {max_weight}")
         solving_time = time.time() - start_time
@@ -96,7 +100,7 @@ class Pbil:
         copyfile(sys.argv[1], metrics_path + ".txt")
         with open(metrics_path + ".csv", 'a') as file:
             file.write(f"id, avg_value, best_value, best_weight\n")
-            for i in range(0, self.generations):
+            for i in range(0, early_stopped):
                 file.write(f"{i}, {generation_values[i]}, {best_values[i]}, {best_weights[i]}\n")
         with open("logs/final.csv", 'a') as file:
             if os.stat("logs/final.csv").st_size == 0:
@@ -104,7 +108,6 @@ class Pbil:
             file.write(f"pbil-{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}; {n}; {value(best_knapsack)}; {optimum}; {weight(best_knapsack)}; {max_weight}; {solving_time}; {best_knapsack}\n")
 
     def create_population(self, probability_vec):
-        # print("create_population", end=" ")
         p = [[0] * n for _ in range(self.population_size)]  # empty 2d array
         for i in range(0, self.population_size):
             for j in range(0, n):
@@ -113,7 +116,6 @@ class Pbil:
         return p
 
     def get_best_knapsack(self, population):
-        # print("get_best_knapsack", end=" ")
         max_value = 0
         max_value_index = -1
         total_value = 0
@@ -138,13 +140,11 @@ class Pbil:
         return alpha
 
     def update_prob_vector(self, alpha, probability_vec):
-        # print("update_prob_vector", end=" ")
         for i in range(0, n):
             probability_vec[i] = probability_vec[i] * (1 - alpha) + alpha * best_knapsack[i]
         return probability_vec
 
     def mutate(self, probability_vec):
-        # print("mutate")
         for i in range(0, n):
             if random.uniform(0, 1) < self.mutation_probability:
                 probability_vec[i] = probability_vec[i] * (1 - self.mutation_value) + random.uniform(0, 1) * self.mutation_value
