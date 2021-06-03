@@ -6,15 +6,19 @@ import sys
 
 def read_problem_from_file(problem_path):
     items = []
-    with open(problem_path, 'r') as file:
-        n, max_weight, optimum = file.readline().split()
-        n = int(n)
-        max_weight = int(max_weight)
-        for i in range(1, n + 1):
-            row_items = file.readline().split()
-            items.append((int(row_items[0]), int(row_items[1])))
-    print(f"Loaded problem from {problem_path}. n={n}, max_weight={max_weight}, items(value, weight)={items}")
-    return n, max_weight, optimum, items
+    try:
+        with open(problem_path, 'r') as file:
+            n, max_weight, optimum = file.readline().split()
+            n = int(n)
+            max_weight = int(max_weight)
+            for i in range(1, n + 1):
+                row_items = file.readline().split()
+                items.append((int(row_items[1]), int(row_items[2])))
+        print(f"Loaded problem from {problem_path}. n={n}, max_weight={max_weight}, items(value, weight)={items}")
+        return n, max_weight, optimum, items
+    except FileNotFoundError:
+        print("Error: Data file not found!")
+        exit()
 
 
 def main(parameters_path):

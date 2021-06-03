@@ -1,0 +1,13 @@
+{
+  "algorithm": "p",
+  "verbose_details": false,
+  "problem_path": "problems/p_knapPI_1_100_10000",
+  "population_size": 500,
+  "generations": 500,
+  "mutation_probability": 0.003,
+  "mutation_value": 0.4,
+  "learning_rate1": 0.1,
+  "learning_rate2": 0.15,
+  "early_stopping_patience": -1,
+  "repeat_times": 50
+}
