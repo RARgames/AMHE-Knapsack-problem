@@ -12,7 +12,6 @@ plt.show()
 
 #%%
 df1 = pd.read_csv("logs/p_knapPI_3_100_1000/final.csv", sep=';')
-print(df1.iloc[:, 3])
 plt.boxplot(df1.iloc[:, 2])
 plt.ylabel('best_knapsack_value')
 plt.show()
