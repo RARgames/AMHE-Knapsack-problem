@@ -1,5 +1,4 @@
 import json
-import os
 import pbil
 import sys
 
@@ -47,8 +46,6 @@ def main(parameters_path):
         solver = pbil.Pbil(population_size, generations, mutation_probability, mutation_value, learning_rate1, learning_rate2, early_stopping_patience)
         for i in range(0, repeat_times):
             solver.run(n, max_weight, optimum, items, verbose_details)
-    else:
-        os.system(f"genetic.py {problem_path} 100 ts 1c 0.7 {mutation_probability} {generations}")
 
 
 if __name__ == '__main__':
